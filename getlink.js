@@ -21,7 +21,7 @@ if(a_to_vh==false)
 {var encryptedUrl=Base64.encode(a_to_vi);
 var x=Math.floor((Math.random()*5)+ 1);
 var xxx=null;
-if(x=="1"){xxx="selecting-rules-for-investing-and_18.html"}
+if(x=="1"){xxx="https://imsahadiweb.blogspot.com/p/selecting-rules-for-investing-and.html"}
 if(x=="2"){xxx="top-10-benefits-of-cloud-hosting-server_18.html"}
 if(x=="3"){xxx="5-benefits-of-using-good-cloud-server.html"}
 if(x=="4"){xxx="5-tips-for-running-successful-home_18.html"}
