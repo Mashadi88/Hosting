@@ -1,30 +1,219 @@
-var Base64={_keyStr:"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",encode:function(input){var output="";var chr1,chr2,chr3,enc1,enc2,enc3,enc4;var i=0;input=Base64._utf8_encode(input);while(i<input.length){chr1=input.charCodeAt(i++);chr2=input.charCodeAt(i++);chr3=input.charCodeAt(i++);enc1=chr1>>2;enc2=((chr1&3)<<4)|(chr2>>4);enc3=((chr2&15)<<2)|(chr3>>6);enc4=chr3&63;if(isNaN(chr2)){enc3=enc4=64;}else if(isNaN(chr3)){enc4=64;}
-output=output+ this._keyStr.charAt(enc1)+ this._keyStr.charAt(enc2)+ this._keyStr.charAt(enc3)+ this._keyStr.charAt(enc4);}
-return output;},decode:function(input){var output="";var chr1,chr2,chr3;var enc1,enc2,enc3,enc4;var i=0;input=input.replace(/[^A-Za-z0-9\+\/\=]/g,"");while(i<input.length){enc1=this._keyStr.indexOf(input.charAt(i++));enc2=this._keyStr.indexOf(input.charAt(i++));enc3=this._keyStr.indexOf(input.charAt(i++));enc4=this._keyStr.indexOf(input.charAt(i++));chr1=(enc1<<2)|(enc2>>4);chr2=((enc2&15)<<4)|(enc3>>2);chr3=((enc3&3)<<6)|enc4;output=output+ String.fromCharCode(chr1);if(enc3!=64){output=output+ String.fromCharCode(chr2);}
-if(enc4!=64){output=output+ String.fromCharCode(chr3);}}
-output=Base64._utf8_decode(output);return output;},_utf8_encode:function(string){string=string.replace(/\r\n/g,"\n");var utftext="";for(var n=0;n<string.length;n++){var c=string.charCodeAt(n);if(c<128){utftext+=String.fromCharCode(c);}
-else if((c>127)&&(c<2048)){utftext+=String.fromCharCode((c>>6)|192);utftext+=String.fromCharCode((c&63)|128);}
-else{utftext+=String.fromCharCode((c>>12)|224);utftext+=String.fromCharCode(((c>>6)&63)|128);utftext+=String.fromCharCode((c&63)|128);}}
-return utftext;},_utf8_decode:function(utftext){var string="";var i=0;var c=c1=c2=0;while(i<utftext.length){c=utftext.charCodeAt(i);if(c<128){string+=String.fromCharCode(c);i++;}
-else if((c>191)&&(c<224)){c2=utftext.charCodeAt(i+ 1);string+=String.fromCharCode(((c&31)<<6)|(c2&63));i+=2;}
-else{c2=utftext.charCodeAt(i+ 1);c3=utftext.charCodeAt(i+ 2);string+=String.fromCharCode(((c&15)<<12)|((c2&63)<<6)|(c3&63));i+=3;}}
-return string;}}
-var encode=document.getElementById('encode'),decode=document.getElementById('decode'),output=document.getElementById('output'),input=document.getElementById('input');var User_ID="";var protected_links="";var a_to_va=0;var a_to_vb=0;var a_to_vc="";function auto_safelink(){auto_safeconvert();}
-function auto_safeconvert(){var a_to_vd=window.location.hostname;if(protected_links!=""&&!protected_links.match(a_to_vd)){protected_links+=", "+ a_to_vd;}else if(protected_links=="")
-{protected_links=a_to_vd;}
-var a_to_ve="";var a_to_vf=new Array();var a_to_vg=0;a_to_ve=document.getElementsByTagName("a");a_to_va=a_to_ve.length;a_to_vf=a_to_fa();a_to_vg=a_to_vf.length;var a_to_vh=false;var j=0;var a_to_vi="";for(var i=0;i<a_to_va;i++)
-{a_to_vh=false;j=0;while(a_to_vh==false&&j<a_to_vg)
-{a_to_vi=a_to_ve[i].href;if(a_to_vi.match(a_to_vf[j])||!a_to_vi||!a_to_vi.match("http"))
-{a_to_vh=true;}
-j++;}
-if(a_to_vh==false)
-{var encryptedUrl=Base64.encode(a_to_vi);
-var x=Math.floor((Math.random()*1)+ 1);
-var xxx=null;
-if(x=="1"){xxx="toko-produk-peralatan-kecantikan.html"}a_to_ve[i].href="https://www.khasbi.com/p/"+xxx+"?url="+ encryptedUrl;a_to_ve[i].rel="nofollow";a_to_vb++;a_to_vc+=i+":::"+ a_to_ve[i].href+"\n";}}
-var a_to_vj=document.getElementById("anonyminized");var a_to_vk=document.getElementById("found_links");if(a_to_vj)
-{a_to_vj.innerHTML+=a_to_vb;}
-if(a_to_vk)
-{a_to_vk.innerHTML+=a_to_va;}}
-function a_to_fa()
-{var a_to_vf=new Array();protected_links=protected_links.replace(" ","");a_to_vf=protected_links.split(",");return a_to_vf;}
+<script>
+//<![CDATA[
+//Pengaturan Umum
+var keyGenerator = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890+/=";  
+var teksGenerate = "Generate Link";
+var teksGetLink = "Lihat Link";
+var timerButton = 15;
+var capubAds = "ca-pub-xxxxxxxxxxxxxxxx";
+var IDslotAds = "xxxxxxxxx";
+
+// Encode Url
+var base64 = {
+    _keyStr: keyGenerator,
+    key: function (e) {
+        var t,
+            n,
+            r,
+            a,
+            o,
+            i,
+            l,
+            c = "",
+            d = 0;
+        for (e = base64._utf8_key(e); d < e.length; )
+            (a = (t = e.charCodeAt(d++)) >> 2),
+                (o = ((3 & t) << 4) | ((n = e.charCodeAt(d++)) >> 4)),
+                (i = ((15 & n) << 2) | ((r = e.charCodeAt(d++)) >> 6)),
+                (l = 63 & r),
+                isNaN(n) ? (i = l = 64) : isNaN(r) && (l = 64),
+                (c = c + this._keyStr.charAt(a) + this._keyStr.charAt(o) + this._keyStr.charAt(i) + this._keyStr.charAt(l));
+        return c;
+    },
+    _utf8_key: function (e) {
+        e = e.replace(/\r\n/g, "\n");
+        for (var t = "", n = 0; n < e.length; n++) {
+            var r = e.charCodeAt(n);
+            r < 128
+                ? (t += String.fromCharCode(r))
+                : r > 127 && r < 2048
+                ? ((t += String.fromCharCode((r >> 6) | 192)), (t += String.fromCharCode((63 & r) | 128)))
+                : ((t += String.fromCharCode((r >> 12) | 224)), (t += String.fromCharCode(((r >> 6) & 63) | 128)), (t += String.fromCharCode((63 & r) | 128)));
+        }
+        return t;
+    },
+};
+
+//Tombol Tools Generate Safelink
+function getSafelink() {
+    var e = new XMLHttpRequest();
+    (e.onreadystatechange = function () {
+        if (e.readyState == XMLHttpRequest.DONE) {
+            var t = "",
+                n = JSON.parse(e.responseText).feed.entry,
+                r = new Array();
+            if (void 0 !== n) {
+                for (var a = 0; a < n.length; a++) {
+                    for (var o = 0; o < n[a].link.length; o++)
+                        if ("alternate" == n[a].link[o].rel) {
+                            t = n[a].link[o].href;
+                            break;
+                        }
+                    r[a] = t;
+                    var i = Math.random() * r.length;
+                    i = parseInt(i);
+                }
+                var l = document.getElementById("urlSafelink").value,
+                    c = r[i] + "?url=" + base64.key(l),
+                    d = document.getElementById("output-safelink");
+                null != d && (d.value = c);
+            }
+        }
+    }),
+        e.open("GET", "/feeds/posts/summary?alt=json", !0),
+        e.send(null),
+        (document.querySelector(".input").style.display = "none"),
+        (document.querySelector(".output").style.display = "block"),
+        (document.querySelector(".tombol-copy-reset").style.display = "block"),
+        (document.getElementById("get-button-safelink").style.display = "none");
+}
+function copySafelink() {
+    document.getElementById("output-safelink").select(), document.execCommand("copy"), (document.getElementById("text-keterangan").innerHTML = "Url berhasil disalin"), (document.getElementById("text-keterangan").style.margin = "10px 0");
+}
+function resetSafelink() {
+    window.location.href = window.location.href;
+}
+window.onload = function () {
+    var e = document.getElementById("get-button-safelink");
+    null != e && ((e.onclick = getSafelink), (document.getElementById("copy-safelink").onclick = copySafelink), (document.getElementById("reset-safelink").onclick = resetSafelink));
+};
+
+// Tombol Auto Safelink
+var autoSafelink = document.querySelectorAll(".auto-safelink");
+if (null != autoSafelink)
+    for (var i = 0; i < autoSafelink.length; i++)
+        autoSafelink[i].addEventListener("click", function () {
+            var e = this.getAttribute("data-link"),
+                t = new XMLHttpRequest();
+            (t.onreadystatechange = function () {
+                if (t.readyState == XMLHttpRequest.DONE) {
+                    var n = "",
+                        r = JSON.parse(t.responseText).feed.entry,
+                        a = new Array();
+                    if (void 0 !== r) {
+                        for (var o = 0; o < r.length; o++) {
+                            for (var i = 0; i < r[o].link.length; i++)
+                                if ("alternate" == r[o].link[i].rel) {
+                                    n = r[o].link[i].href;
+                                    break;
+                                }
+                            a[o] = n;
+                            var l = Math.random() * a.length;
+                            l = parseInt(l);
+                        }
+                        var c = a[l] + "?url=" + base64.key(e);
+                        window.open(c, "_blank");
+                    }
+                }
+            }),
+                t.open("GET", "/feeds/posts/summary?alt=json", !0),
+                t.send(null);
+        });
+
+//Mengambil Kode Hasil Generate Pada Paramater ?Url=
+function getVariable(e) {
+    for (
+        var t = {
+                _keyStr: keyGenerator,
+                key: function (e) {
+                    var n,
+                        r,
+                        a,
+                        o,
+                        i,
+                        l,
+                        c = "",
+                        d = 0;
+                    for (e = e.replace(/[^A-Za-z0-9\+\/\=]/g, ""); d < e.length; )
+                        (n = (this._keyStr.indexOf(e.charAt(d++)) << 2) | ((o = this._keyStr.indexOf(e.charAt(d++))) >> 4)),
+                            (r = ((15 & o) << 4) | ((i = this._keyStr.indexOf(e.charAt(d++))) >> 2)),
+                            (a = ((3 & i) << 6) | (l = this._keyStr.indexOf(e.charAt(d++)))),
+                            (c += String.fromCharCode(n)),
+                            64 != i && (c += String.fromCharCode(r)),
+                            64 != l && (c += String.fromCharCode(a));
+                    return (c = t._utf8_key(c));
+                },
+                _utf8_key: function (e) {
+                    for (var t = "", n = 0, r = (c1 = c2 = 0); n < e.length; )
+                        (r = e.charCodeAt(n)) < 128
+                            ? ((t += String.fromCharCode(r)), n++)
+                            : r > 191 && r < 224
+                            ? ((c2 = e.charCodeAt(n + 1)), (t += String.fromCharCode(((31 & r) << 6) | (63 & c2))), (n += 2))
+                            : ((c2 = e.charCodeAt(n + 1)), (c3 = e.charCodeAt(n + 2)), (t += String.fromCharCode(((15 & r) << 12) | ((63 & c2) << 6) | (63 & c3))), (n += 3));
+                    return t;
+                },
+            },
+            n = window.location.search.substring(1).split("&"),
+            r = 0;
+        r < n.length;
+        r++
+    ) {
+        var a = n[r].split("=");
+        if (a[0] == e) return t.key(a[1]);
+    }
+    return !1;
+}
+
+// Cek Paramater ?url=
+let cekUrlSafelink = getVariable("url");
+
+//Generate Link (decode)
+if (0 != cekUrlSafelink) {
+    document.getElementById("progress-bar").innerHTML =
+        '<div class="circular" style="transform: scale(0.6)"><div class="inner"></div><div class="number"></div><div class="circle"><div class="bar left"><div class="progress"></div></div><div class="bar right"><div class="progress"></div></div></div></div><div class="generate-link">' +
+        teksGenerate +
+        "</div>";
+    const e = document.querySelector(".number");
+    let t = 0;
+    function gotoLink() {
+        var e = document.getElementById("gotolink"),
+            t = e.offsetTop;
+        window.scrollTo(0, t),
+            (e.innerHTML =
+                "<ins class='adsbygoogle' data-ad-client='"+capubAds+"' data-ad-format='fluid' data-ad-layout='in-article' data-ad-slot='"+IDslotAds+"' style='display:block; text-align:center;'></ins><div class='proses-link'></div><div id='menuju-link'>" +
+                teksGetLink +
+                "</div><ins class='adsbygoogle' data-ad-client='"+capubAds+"' data-ad-format='fluid' data-ad-layout='in-article' data-ad-slot='"+IDslotAds+"' style='display:block; text-align:center;'></ins>"),
+            (document.getElementById("menuju-link").onclick = function () {
+                var e = cekUrlSafelink;
+                window.open(e, "_self");
+            });
+        var n = timerButton;
+        setInterval(function () {
+            n <= 1
+                ? ((document.getElementById("menuju-link").style.display = "inline-block"), (document.querySelector(".proses-link").style.display = "none"))
+                : ((document.getElementById("menuju-link").style.display = "none"), (document.querySelector(".proses-link").innerHTML = "Link will appear in " + --n + " second"));
+        }, 1e3);
+    }
+    setInterval(() => {
+        100 == t
+            ? (clearInterval(), (document.querySelector(".generate-link").style.display = "inline-block"), (document.querySelector(".circular").style = "display:none;transform: scale(0.6)"))
+            : ((t += 1), (e.textContent = t + "%"), (document.querySelector(".generate-link").style.display = "none"));
+    }, 80),
+        (document.querySelector("#progress-bar").onclick = gotoLink);
+    var uri = window.location.toString();
+    if (uri.indexOf("?", "?") > 0) {
+        var clean_uri = uri.substring(0, uri.indexOf("?"));
+        window.history.replaceState({}, document.title, clean_uri);
+    }
+	
+	//Clean Parameter ?url=
+    function clickIE4() {
+        return 2 != event.button && void 0;
+    }
+    function clickNS4(e) {
+        return (!(document.layers || (document.getElementById && !document.all)) || (2 != e.which && 3 != e.which)) && void 0;
+    }
+    document.layers ? (document.captureEvents(Event.MOUSEDOWN), (document.onmousedown = clickNS4)) : document.all && !document.getElementById && (document.onmousedown = clickIE4), (document.oncontextmenu = new Function("return false"));
+}
+//]]>
+</script>
